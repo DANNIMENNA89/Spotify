@@ -1,11 +1,18 @@
 import { Routes } from '@angular/router';
-import { HomePageComponent } from './pages/home-page/home-page.component';
 
 
 export const homeRoutes: Routes = [
   {
-    path:'', //TODO: http://localhost:4200/dashboard
-    component:HomePageComponent
+    path: 'tracks',
+    loadChildren:() => import(`@modules/tracks/tracks.routes`).then(m => m.tracksRoutes)
+  },
+  {
+    path: 'favorites',
+    loadChildren:() => import(`@modules/favorite/favorite.routes`).then(m => m.favoriteRoutes)
+  },
+  {
+    path: 'history',
+    loadChildren:() => import(`@modules/history/history.routes`).then(m => m.historyRoutes)
   }
 ];
 

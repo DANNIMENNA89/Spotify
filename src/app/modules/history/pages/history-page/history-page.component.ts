@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './history-page.component.html',
   styleUrl: './history-page.component.css'
 })
-export class HostoryPageComponent {
+export class HistoryPageComponent {
 
 }
