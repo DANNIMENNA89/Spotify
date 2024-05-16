@@ -13,6 +13,10 @@ export const homeRoutes: Routes = [
   {
     path: 'history',
     loadChildren:() => import(`@modules/history/history.routes`).then(m => m.historyRoutes)
+  },
+  {
+    path: '**', //Cuando 404, no existe la ruta
+    redirectTo: '/tracks'
   }
 ];
 

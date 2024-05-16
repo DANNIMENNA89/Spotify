@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '@modules/auth/services/auth.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-auth-page',
@@ -14,10 +15,10 @@ import { AuthService } from '@modules/auth/services/auth.service';
   styleUrl: './auth-page.component.css'
 })
 export class AuthPageComponent implements OnInit {
-
+  errorSession: boolean = false
   formLogin: FormGroup = new FormGroup({});
 
-  constructor(private authServices: AuthService){}
+  constructor(private authServices: AuthService, private cookie: CookieService){}
 
   ngOnInit(): void {
     this.formLogin = new FormGroup(
@@ -38,6 +39,16 @@ export class AuthPageComponent implements OnInit {
   sendLogin(): void{
     const { email, password} = this.formLogin.value
     this.authServices.sendCredentials(email, password)
-
+        //TODO: 200 <400
+    .subscribe(responseOk => { //TODO: Cuando el usuario credenciales Correctas ✔✔
+      console.log('Session iniciada correcta', responseOk)
+      const { tokenSession, data } = responseOk
+      this.cookie.set('token', tokenSession, 4, '/')
+    },
+      err => {//TODO error 400>=
+        this.errorSession=true
+        console.log('⚠⚠⚠⚠ Ocurrio error con tu email o password');
+      })
   }
 }
+

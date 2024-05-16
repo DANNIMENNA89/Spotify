@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SectionGenericComponent } from '@shared/components/section-generic/section-generic.component';
-import * as dataRaw from '../../../../data/tracks.json'
 import { TrackModel } from '@core/models/tracks.model';
-
+import { TracksService } from '@modules/tracks/services/tracks.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -15,16 +15,33 @@ import { TrackModel } from '@core/models/tracks.model';
   styleUrl: './tracks-page.component.css'
 })
 
-export class TracksPageComponent implements OnInit {
-  mockTrackList: Array<TrackModel>=[]
+export class TracksPageComponent implements OnInit, OnDestroy {
+  tracksTrending: Array<TrackModel>=[]
+  tracksRandom: Array<TrackModel>=[]
 
-  constructor(){
+  listObservers$: Array<Subscription> =[]
 
-  }
-
+  constructor(private trackService: TracksService){  }
 
   ngOnInit(): void {
-    const { data }: any = (dataRaw as any).default
-    this.mockTrackList = data
+    this.loadDataAll()
+    this.loadDataRandom()
+  }
+
+  //En curso se ecplica promesa toPromise(), pero en esta depreciado, al igual que poner error despues de response: err =>{console.log('Error de conexión', err);})
+  loadDataAll(): void {
+    this.trackService.getAllTracks$().subscribe((response: TrackModel[]) => {
+      this.tracksTrending = response;
+    })
+  }
+
+  loadDataRandom(): void {
+    this.trackService.getAllRandoms$().subscribe((response: TrackModel[]) => {
+      this.tracksRandom = response;
+    })
+  }
+
+  ngOnDestroy(): void {
+
   }
 }
