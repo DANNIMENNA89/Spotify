@@ -14,7 +14,7 @@ export class SearchComponent {
 
   @Output() callbackData: EventEmitter<any> = new EventEmitter()
 
-  src: string = '🙄'
+  src: string = ''
 
   callSearch(term: string): void{
     if(term.length >= 3){
